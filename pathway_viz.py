@@ -76,7 +76,7 @@ def draw_pathway(
     vmin = min(known) if known else 0
     vmax = max(known) if known else 1
 
-    cmap = cm.get_cmap(colormap)
+    cmap = matplotlib.colormaps[colormap]
     norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
 
     node_colors = [
@@ -127,34 +127,65 @@ def draw_pathway(
 # Example — edit this section to plug in your own data
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    # Directed edges: (upstream, downstream)
+    # Directed edges: dopaminergic pathway (catecholamine synthesis & metabolism)
     pathway = [
-        ("Glucose", "G6P"),
-        ("G6P", "F6P"),
-        ("F6P", "F1,6BP"),
-        ("F1,6BP", "DHAP"),
-        ("F1,6BP", "G3P"),
-        ("DHAP", "G3P"),
-        ("G3P", "1,3BPG"),
-        ("1,3BPG", "3PG"),
-        ("3PG", "2PG"),
-        ("2PG", "PEP"),
-        ("PEP", "Pyruvate"),
+        # Synthesis branch
+        ("DOPA", "DA"),         # AADC
+        ("DA", "NE"),           # DBH
+        ("NE", "EP"),           # PNMT
+        # COMT O-methylation of precursor
+        ("DOPA", "3-OMD"),      # COMT
+        ("3-OMD", "VP"),
+        ("VP", "VLA"),
+        # DA catabolism
+        ("DA", "3-MT"),         # COMT
+        ("DA", "DOPAL"),        # MAO
+        ("3-MT", "MOPAL"),      # MAO
+        ("DOPAL", "DOPAC"),     # AD
+        ("DOPAL", "DOPET"),     # AR
+        ("MOPAL", "HVA"),       # AD
+        ("DOPAC", "HVA"),       # COMT
+        ("DOPET", "MOPET"),     # COMT
+        # NE / EP catabolism
+        ("NE", "DOPEGAL"),      # MAO
+        ("NE", "NMN"),          # COMT
+        ("EP", "MN"),           # COMT
+        ("DOPEGAL", "DOPEG"),   # AR
+        ("DOPEG", "MOPEG"),     # COMT
+        ("NMN", "DOMA"),        # MAO
+        ("MN", "MOPEGAL"),      # MAO
+        # Convergence to VMA
+        ("DOMA", "VMA"),        # COMT
+        ("MOPEGAL", "VMA"),     # AD
+        ("DOPEG", "VMA"),       # AD  (liver, adrenal gland)
+        ("MOPEG", "VMA"),       # AD
+        ("MOPET", "VMA"),       # ADH (liver, adrenal gland)
     ]
 
     # Measured abundance values (e.g. log2 fold-change or raw intensities)
     abundance = {
-        "Glucose":  1.2,
-        "G6P":      2.5,
-        "F6P":      1.8,
-        "F1,6BP":   3.1,
-        "DHAP":     0.5,
-        "G3P":      2.0,
-        "1,3BPG":  -0.3,
-        "3PG":     -1.1,
-        "2PG":     -0.8,
-        "PEP":      0.2,
-        "Pyruvate": 1.5,
+        "DOPA":     2.0,
+        "3-OMD":    0.8,
+        "VP":       0.3,
+        "VLA":      0.1,
+        "DA":       3.5,
+        "NE":       2.8,
+        "EP":       1.5,
+        "3-MT":     1.2,
+        "DOPAL":   -0.5,
+        "MOPAL":   -0.2,
+        "DOPAC":    0.9,
+        "DOPET":    0.4,
+        "HVA":      2.2,
+        "MOPET":    0.3,
+        "DOPEGAL": -0.8,
+        "NMN":      1.0,
+        "MN":       0.6,
+        "DOPEG":   -0.4,
+        "MOPEG":    0.5,
+        "DOMA":     0.7,
+        "MOPEGAL": -0.1,
+        "VMA":      1.8,
     }
 
     # Any matplotlib colormap: 'RdYlGn', 'viridis', 'plasma', 'coolwarm', …
@@ -165,6 +196,6 @@ if __name__ == "__main__":
         abundance=abundance,
         colormap=colormap,
         output="pathway.svg",
-        title="Glycolysis — Substrate Abundance",
+        title="Dopaminergic Pathway — Metabolite Abundance",
         layout="dot",          # requires pygraphviz; falls back to kamada_kawai
     )
