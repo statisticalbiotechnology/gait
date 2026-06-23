@@ -596,14 +596,19 @@ will test on the matched FMP-10 data.
 Because the score underlying these maps requires no region annotation --- a
 dominant-component-weighted Moran's I of the component activities times the entropy of the
 dominant-component map --- it can rank \emph{arbitrary} pathways by how regionally structured
-their activity is. Scanning the 304 KEGG pathways on a striatal section (\code{scan\_pathways.py}),
-the highest-scoring of the 295 with sufficient genes are the \emph{synaptic} pathways ---
-\textbf{GABAergic, dopaminergic and glutamatergic synapse} --- followed by cAMP, calcium and
-retrograde-endocannabinoid signalling and neuroactive ligand--receptor interaction: the screen
-recovers the striatal neurotransmission biology with no annotation and reproduces the
-supervised ranking above, two independent metrics in agreement. (KEGG gene-set overlap means
-several lower hits, e.g.\ the addiction pathways, largely re-detect the same synaptic
-programmes rather than independent biology.)
+their activity is. We scanned the 304 KEGG pathways (\code{scan\_pathways.py}) across the eight
+striatal sections of the cohort and aggregated each pathway by its \emph{median} score and
+median rank over the sections. The top of the ranking is consistently occupied by the
+\emph{synaptic / neuro-signalling} pathways --- \textbf{glutamatergic and dopaminergic synapse,
+cAMP and calcium signalling, retrograde-endocannabinoid signalling} and neuroactive
+ligand--receptor interaction (each present and scored in all eight sections) --- so the screen
+recovers the striatal neurotransmission biology with no annotation and reproduces the supervised
+ranking above, two independent metrics in agreement. The \emph{class} of top pathways is stable
+section-to-section even where the exact order is not: the GABAergic-synapse set, top-ranked on
+the single section first examined, falls to a median rank of $12$ across the eight, whereas the
+dopaminergic synapse holds a median rank of $4$. (KEGG gene-set overlap means several lower
+hits, e.g.\ the addiction pathways, largely re-detect the same synaptic programmes rather than
+independent biology.)
 
 \begin{table}[t]
   \centering
